@@ -54,6 +54,8 @@ namespace WstecznaPropagacjaZad2
         }
         static void Main(string[] args)
         {
+            double ParametrUczenia = 0.3;
+            double B = 1;
             int liczbaWagNeurona = 3;
             int liczbaNauronowUkrytych = 2;
             int liczbaNauronowWyjsciowych = 2;
@@ -71,7 +73,7 @@ namespace WstecznaPropagacjaZad2
                 new double[]{1, 0},
                 new double[]{1, 1},
             };
-            double[][] WyjsciaSieci = new double[][]
+            double[][] OczekiwaneWyjsciaSieci = new double[][]
             {
                 new double[]{0, 1},
                 new double[]{1, 0},
@@ -85,8 +87,38 @@ namespace WstecznaPropagacjaZad2
                 for (int i = 0; i<WejsciaSieci.Length; i++)
                 {
                     (double N1, double N2, double N3, double N4) = SiecNeuronowa(WejsciaSieci[i], WagiSieci, liczbaWagNeurona);
-                    Console.WriteLine("Wyjscie sieci 1: "+N3);
-                    Console.WriteLine("Wyjscie sieci 2: " + N4);
+                    //Console.WriteLine("Wyjscie sieci 1: "+N3);
+                    //Console.WriteLine("Wyjscie sieci 2: " + N4);
+
+                    double[] d = OczekiwaneWyjsciaSieci[i];
+                    //double bladwyjscia1 = d - Nwyjsciowy;
+                    //Console.WriteLine("Blad wyjsccia1 = "+bladwyjscia1);
+                    double PoprawkaWyjscia1 = ParametrUczenia * (d[0] - N3) * (B * N3 * (1 - N3));//pmUczenia*błąd wyjscia * pochodna
+                    double PoprawkaWyjscia2 = ParametrUczenia * (d[1] - N4) * (B * N4 * (1 - N4));
+
+                    double PoprawkaNUkryty1 = PoprawkaWyjscia1 * WagiSieci[7] * (B * N1 * (1 - N1));
+                    PoprawkaNUkryty1 += PoprawkaWyjscia2 * WagiSieci[11] * (B * N1 * (1 - N1));
+
+                    double PoprawkaNUkryty2 = PoprawkaWyjscia1 * WagiSieci[8] * (B * N2 * (1 - N2));
+                    PoprawkaNUkryty2 += PoprawkaWyjscia2 * WagiSieci[10] * (B * N2 * (1 - N2));
+
+                    //Dla wag neurona wyjscia 1 (N3)
+                    WagiSieci[6] += PoprawkaWyjscia1;
+                    WagiSieci[7] += (PoprawkaWyjscia1 * N1);
+                    WagiSieci[8] += (PoprawkaWyjscia1 * N2);
+
+                    //Dla wag neurona wyjscia 2 (N4)
+                    WagiSieci[9] += PoprawkaWyjscia1;
+                    WagiSieci[11] += (PoprawkaWyjscia1 * N1);
+                    WagiSieci[10] += (PoprawkaWyjscia1 * N2);
+
+                    WagiSieci[0] += PoprawkaNUkryty1;
+                    WagiSieci[1] += (PoprawkaNUkryty1 * WejsciaSieci[i][0]);
+                    WagiSieci[2] += (PoprawkaNUkryty1 * WejsciaSieci[i][1]);
+
+                    WagiSieci[3] += PoprawkaNUkryty2;
+                    WagiSieci[4] += PoprawkaNUkryty2 * WejsciaSieci[i][0];
+                    WagiSieci[5] += PoprawkaNUkryty2 * WejsciaSieci[i][1];
                 }
             }
             Console.ReadKey();
