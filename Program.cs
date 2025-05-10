@@ -8,6 +8,7 @@ namespace WstecznaPropagacjaZad2
 {
     internal class Program
     {
+        static public Random randomowa = new Random();
         public static (double, double, double,double) SiecNeuronowa(double[] wejscie, double[] Wagi, int LiczbaWagNeurona)
         {
             double[] neurony = new double[Wagi.Length / LiczbaWagNeurona];
@@ -53,7 +54,42 @@ namespace WstecznaPropagacjaZad2
         }
         static void Main(string[] args)
         {
+            int liczbaWagNeurona = 3;
+            int liczbaNauronowUkrytych = 2;
+            int liczbaNauronowWyjsciowych = 2;
+            int liczbaWag = (liczbaNauronowUkrytych + liczbaNauronowWyjsciowych) * liczbaWagNeurona;
+            double[] WagiSieci = new double[liczbaWag];
+            for(int i = 0; i<liczbaWag; i++)
+            {
+                WagiSieci[i] = (randomowa.NextDouble()*2)-1;
+                Console.WriteLine("Waga"+i+" : " + WagiSieci[i]);
+            }
+            double[][] WejsciaSieci = new double[][]
+            {
+                new double[]{0, 0},
+                new double[]{0, 1},
+                new double[]{1, 0},
+                new double[]{1, 1},
+            };
+            double[][] WyjsciaSieci = new double[][]
+            {
+                new double[]{0, 1},
+                new double[]{1, 0},
+                new double[]{1, 0},
+                new double[]{0, 1},
+            };
 
+            for (int epoki = 0; epoki<=2; epoki++)
+            {
+                double[][] wyniki = new double[WejsciaSieci.Length][];
+                for (int i = 0; i<WejsciaSieci.Length; i++)
+                {
+                    (double N1, double N2, double N3, double N4) = SiecNeuronowa(WejsciaSieci[i], WagiSieci, liczbaWagNeurona);
+                    Console.WriteLine("Wyjscie sieci 1: "+N3);
+                    Console.WriteLine("Wyjscie sieci 2: " + N4);
+                }
+            }
+            Console.ReadKey();
         }
     }
 }
