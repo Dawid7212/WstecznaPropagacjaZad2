@@ -63,7 +63,7 @@ namespace WstecznaPropagacjaZad2
         static void Main(string[] args)
         {
             double ParametrUczenia = 0.3;
-            double B = 1;
+            int B = 1;    
             int liczbaWagNeurona = 3;
             int liczbaNauronowUkrytych = 4;
             int liczbaNauronowWyjsciowych = 2;
@@ -91,6 +91,8 @@ namespace WstecznaPropagacjaZad2
 
             for (int epoki = 0; epoki<=100000; epoki++)
             {
+
+
                 double[][] wyniki = new double[WejsciaSieci.Length][];
                 for (int i = 0; i<WejsciaSieci.Length; i++)
                 {
@@ -134,8 +136,8 @@ namespace WstecznaPropagacjaZad2
 
                     //Dla wag neurona ukrytej warstwy 2 (N4)
                     WagiSieci[9] += PoprawkaNUkryty4;
-                    WagiSieci[11] += (PoprawkaNUkryty4 * N1);
-                    WagiSieci[10] += (PoprawkaNUkryty4 * N2);
+                    WagiSieci[10] += (PoprawkaNUkryty4 * N1);
+                    WagiSieci[11] += (PoprawkaNUkryty4 * N2);
 
                     WagiSieci[0] += PoprawkaNUkryty1;
                     WagiSieci[1] += (PoprawkaNUkryty1 * WejsciaSieci[i][0]);
